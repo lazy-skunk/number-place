@@ -3,25 +3,17 @@ export type Board = number[][];
 const GRID_SIZE = 9;
 const BOX_SIZE = 3;
 
-const createZeroBasedIndices = (length: number) =>
-  Array.from({ length }, (_, index) => index);
+const createZeroBasedIndices = (length: number) => Array.from({ length }, (_, index) => index);
 
 export function cloneBoard(board: Board): Board {
   return board.map((row) => [...row]);
 }
 
 export function emptyBoard(): Board {
-  return createZeroBasedIndices(GRID_SIZE).map(() =>
-    createZeroBasedIndices(GRID_SIZE).map(() => 0),
-  );
+  return Array.from({ length: GRID_SIZE }, () => Array<number>(GRID_SIZE).fill(0));
 }
 
-function isSafe(
-  board: Board,
-  rowIndex: number,
-  columnIndex: number,
-  value: number,
-): boolean {
+function isSafe(board: Board, rowIndex: number, columnIndex: number, value: number): boolean {
   for (let index = 0; index < GRID_SIZE; index++) {
     if (board[rowIndex][index] === value) return false;
     if (board[index][columnIndex] === value) return false;
@@ -30,8 +22,7 @@ function isSafe(
   const boxColumn = Math.floor(columnIndex / BOX_SIZE) * BOX_SIZE;
   for (let rowOffset = 0; rowOffset < BOX_SIZE; rowOffset++) {
     for (let columnOffset = 0; columnOffset < BOX_SIZE; columnOffset++) {
-      if (board[boxRow + rowOffset][boxColumn + columnOffset] === value)
-        return false;
+      if (board[boxRow + rowOffset][boxColumn + columnOffset] === value) return false;
     }
   }
   return true;
@@ -55,6 +46,7 @@ function shuffle<T>(items: T[]): T[] {
   return copy;
 }
 
+// Fills the board in place; restores it if no solution exists.
 function solve(board: Board): boolean {
   const empty = findEmpty(board);
   if (!empty) return true;
@@ -69,6 +61,8 @@ function solve(board: Board): boolean {
   return false;
 }
 
+// Temporarily changes cells, restoring them before returning.
+// Finding two solutions is enough to rule out uniqueness.
 function isUniqueSolution(board: Board): boolean {
   const countSolutionPaths = (current: Board, limit: number): number => {
     const empty = findEmpty(current);

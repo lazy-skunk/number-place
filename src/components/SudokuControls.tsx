@@ -1,7 +1,5 @@
-"use client";
-
-import type { Difficulty } from "@/features/sudoku/lib/sudoku";
-import { mergeClassNames } from "@/lib/mergeConditionalClasses";
+import { mergeClassNames } from "../lib/mergeConditionalClasses";
+import type { Difficulty } from "../lib/sudoku";
 
 type SudokuControlsProps = {
   difficulty: Difficulty;
@@ -39,16 +37,13 @@ export function SudokuControls({
         </button>
       ))}
 
-      <div className="mx-2 h-px w-full bg-foreground/50 sm:h-6 sm:w-px" />
+      <div className="mx-2 h-px w-full bg-zinc-500 sm:h-6 sm:w-px" />
 
       <button className="px-3 py-2 rounded border" onClick={onReset}>
         Reset
       </button>
 
-      <button
-        className="px-3 py-2 rounded border"
-        onClick={onToggleSolutionVisibility}
-      >
+      <button className="px-3 py-2 rounded border" onClick={onToggleSolutionVisibility}>
         {isSolutionVisible ? "Hide Solution" : "Show Solution"}
       </button>
 

@@ -1,5 +1,3 @@
-"use client";
-
 import { SudokuBoard } from "./SudokuBoard";
 import { SudokuControls } from "./SudokuControls";
 import { SudokuSolution } from "./SudokuSolution";
@@ -13,8 +11,6 @@ export function SudokuApp() {
     applyDigitInput,
     startNewGame,
     resetToInitialPuzzle,
-    selectCellPosition,
-    selectedCellPosition,
     isVerifyResultVisible,
     isSolutionVisible,
     solutionBoard,
@@ -59,8 +55,6 @@ export function SudokuApp() {
       <SudokuBoard
         cells={cells}
         onInput={applyDigitInput}
-        onSelect={selectCellPosition}
-        selectedCellPosition={selectedCellPosition}
         isVerifyResultVisible={isVerifyResultVisible}
         solutionBoard={solutionBoard}
       />

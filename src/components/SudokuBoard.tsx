@@ -1,34 +1,24 @@
-"use client";
-
-import { type Board } from "@/features/sudoku/lib/sudoku";
-import { mergeClassNames } from "@/lib/mergeConditionalClasses";
+import { mergeClassNames } from "../lib/mergeConditionalClasses";
+import { type Board } from "../lib/sudoku";
 import type { Cell } from "../hooks/useSudokuState";
 
 type SudokuBoardProps = {
   cells: Cell[][];
-  selectedCellPosition: [number, number] | null;
   isVerifyResultVisible: boolean;
   solutionBoard: Board;
   onInput: (rowIndex: number, columnIndex: number, value: string) => void;
-  onSelect: (rowIndex: number, columnIndex: number) => void;
 };
 
 export function SudokuBoard({
   cells,
-  selectedCellPosition,
   isVerifyResultVisible,
   solutionBoard,
   onInput,
-  onSelect,
 }: SudokuBoardProps) {
   return (
-    <div className="grid grid-cols-9 border-2 border-foreground select-none">
+    <div className="grid grid-cols-9 border-2 border-current select-none">
       {cells.map((row, rowIndex) =>
         row.map((cell, columnIndex) => {
-          const isSelected =
-            selectedCellPosition &&
-            selectedCellPosition[0] === rowIndex &&
-            selectedCellPosition[1] === columnIndex;
           const isWrongVisible =
             isVerifyResultVisible &&
             cell.value !== 0 &&
@@ -44,16 +34,14 @@ export function SudokuBoard({
             <div
               key={`${rowIndex}-${columnIndex}`}
               className={mergeClassNames(
-                "relative w-[clamp(2rem,10vw,3rem)] h-[clamp(2rem,10vw,3rem)] border border-foreground/50 flex items-center justify-center",
+                "relative w-[clamp(2rem,10vw,3rem)] h-[clamp(2rem,10vw,3rem)] border border-zinc-500 flex items-center justify-center focus-within:ring focus-within:ring-green-500",
                 rowIndex % 3 === 0 && "border-t-2",
                 columnIndex % 3 === 0 && "border-l-2",
                 rowIndex === 8 && "border-b-2",
                 columnIndex === 8 && "border-r-2",
-                isSelected && "ring ring-green-500",
                 isWrongVisible && "bg-red-500/10",
                 isCorrectVisible && "bg-green-500/10",
               )}
-              onClick={() => onSelect(rowIndex, columnIndex)}
             >
               <input
                 inputMode="numeric"
@@ -64,9 +52,7 @@ export function SudokuBoard({
                   cell.fixed ? "font-bold" : "text-green-500",
                 )}
                 value={cell.value === 0 ? "" : String(cell.value)}
-                onChange={(event) =>
-                  onInput(rowIndex, columnIndex, event.target.value)
-                }
+                onChange={(event) => onInput(rowIndex, columnIndex, event.target.value)}
                 disabled={cell.fixed}
               />
             </div>
