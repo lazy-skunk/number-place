@@ -1,9 +1,9 @@
-import { SudokuApp } from "./components/SudokuApp";
+import { NumberPlaceApp } from "./components/NumberPlaceApp";
 
 export function App() {
   return (
     <main>
-      <SudokuApp />
+      <NumberPlaceApp />
     </main>
   );
 }

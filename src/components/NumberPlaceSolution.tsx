@@ -1,11 +1,11 @@
 import { mergeClassNames } from "../lib/mergeConditionalClasses";
-import type { Board } from "../lib/sudoku";
+import type { Board } from "../lib/numberPlace";
 
-type SudokuSolutionProps = {
+type NumberPlaceSolutionProps = {
   solutionBoard: Board;
 };
 
-export function SudokuSolution({ solutionBoard }: SudokuSolutionProps) {
+export function NumberPlaceSolution({ solutionBoard }: NumberPlaceSolutionProps) {
   return (
     <div className="flex flex-col items-center gap-2">
       <h2 className="text-lg font-semibold">Solution</h2>

@@ -1,20 +1,20 @@
 import { mergeClassNames } from "../lib/mergeConditionalClasses";
-import { type Board } from "../lib/sudoku";
-import type { Cell } from "../hooks/useSudokuState";
+import { type Board } from "../lib/numberPlace";
+import type { Cell } from "../hooks/useNumberPlaceState";
 
-type SudokuBoardProps = {
+type NumberPlaceBoardProps = {
   cells: Cell[][];
   isVerifyResultVisible: boolean;
   solutionBoard: Board;
   onInput: (rowIndex: number, columnIndex: number, value: string) => void;
 };
 
-export function SudokuBoard({
+export function NumberPlaceBoard({
   cells,
   isVerifyResultVisible,
   solutionBoard,
   onInput,
-}: SudokuBoardProps) {
+}: NumberPlaceBoardProps) {
   return (
     <div className="grid grid-cols-9 border-2 border-current select-none">
       {cells.map((row, rowIndex) =>

@@ -1,7 +1,7 @@
 import { mergeClassNames } from "../lib/mergeConditionalClasses";
-import type { Difficulty } from "../lib/sudoku";
+import type { Difficulty } from "../lib/numberPlace";
 
-type SudokuControlsProps = {
+type NumberPlaceControlsProps = {
   difficulty: Difficulty;
   onNewGame: (difficulty: Difficulty) => void;
   onReset: () => void;
@@ -13,7 +13,7 @@ type SudokuControlsProps = {
 
 const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
 
-export function SudokuControls({
+export function NumberPlaceControls({
   difficulty,
   onNewGame,
   onReset,
@@ -21,7 +21,7 @@ export function SudokuControls({
   onToggleSolutionVisibility,
   isVerifyResultVisible,
   onToggleVerifyResultVisibility,
-}: SudokuControlsProps) {
+}: NumberPlaceControlsProps) {
   return (
     <div className="flex flex-wrap items-center justify-center gap-2">
       {DIFFICULTIES.map((difficultyOption) => (

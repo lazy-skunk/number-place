@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { emptyBoard } from "./sudoku";
+import { emptyBoard } from "./numberPlace";
 
 describe("emptyBoard", () => {
   it("creates a 9x9 board filled with zeroes", () => {

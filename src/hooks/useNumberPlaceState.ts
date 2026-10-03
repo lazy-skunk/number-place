@@ -1,4 +1,4 @@
-import { generatePuzzle, type Board, type Difficulty } from "../lib/sudoku";
+import { generatePuzzle, type Board, type Difficulty } from "../lib/numberPlace";
 import { useState } from "react";
 
 export type Cell = {
@@ -27,7 +27,7 @@ function createGameState(difficulty: Difficulty): InternalState {
   };
 }
 
-export function useSudokuState() {
+export function useNumberPlaceState() {
   const defaultDifficulty: Difficulty = "easy";
   const [state, setState] = useState<InternalState>(() => createGameState(defaultDifficulty));
   const { cells, difficulty, solution: solutionBoard } = state;
