@@ -40,7 +40,7 @@ export function NumberPlaceApp() {
   );
 
   return (
-    <section className="flex flex-col items-center gap-5 p-3">
+    <section className="flex min-h-screen flex-col items-center justify-center gap-5 p-3">
       <h1 className="text-3xl font-bold">Number Place</h1>
 
       <NumberPlaceControls
