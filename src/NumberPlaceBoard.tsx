@@ -43,6 +43,7 @@ export function NumberPlaceBoard({
               )}
             >
               <input
+                aria-label={`Row ${rowIndex + 1}, column ${columnIndex + 1}`}
                 inputMode="numeric"
                 pattern="[1-9]*"
                 maxLength={1}
