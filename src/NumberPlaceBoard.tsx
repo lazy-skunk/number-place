@@ -16,7 +16,7 @@ export function NumberPlaceBoard({
   onInput,
 }: NumberPlaceBoardProps) {
   return (
-    <div className="grid grid-cols-9 border-2 border-current select-none">
+    <div className="grid grid-cols-9 border-2 border-gray-500">
       {cells.map((row, rowIndex) =>
         row.map((cell, columnIndex) => {
           const isWrongVisible =
@@ -34,13 +34,12 @@ export function NumberPlaceBoard({
             <div
               key={`${rowIndex}-${columnIndex}`}
               className={mergeClassNames(
-                "relative w-[clamp(2rem,10vw,3rem)] h-[clamp(2rem,10vw,3rem)] border border-gray-500 flex items-center justify-center focus-within:ring focus-within:ring-green-500",
-                rowIndex % 3 === 0 && "border-t-2",
-                columnIndex % 3 === 0 && "border-l-2",
-                rowIndex === 8 && "border-b-2",
-                columnIndex === 8 && "border-r-2",
-                isWrongVisible && "bg-red-500/10",
-                isCorrectVisible && "bg-green-500/10",
+                "size-9 border border-gray-500",
+                rowIndex > 0 && rowIndex % 3 === 0 && "border-t-2",
+                columnIndex > 0 && columnIndex % 3 === 0 && "border-l-2",
+                cell.fixed && "bg-gray-800/50",
+                isWrongVisible && "bg-red-900",
+                isCorrectVisible && "bg-green-900",
               )}
             >
               <input
@@ -48,8 +47,8 @@ export function NumberPlaceBoard({
                 pattern="[1-9]*"
                 maxLength={1}
                 className={mergeClassNames(
-                  "w-full h-full text-center text-[clamp(1.5rem,5vw,2.5rem)] outline-none bg-transparent",
-                  cell.fixed ? "font-bold" : "text-green-500",
+                  "size-full bg-transparent text-center text-3xl",
+                  cell.fixed && "font-bold",
                 )}
                 value={cell.value === 0 ? "" : String(cell.value)}
                 onChange={(event) => onInput(rowIndex, columnIndex, event.target.value)}

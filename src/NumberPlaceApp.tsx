@@ -1,6 +1,5 @@
 import { NumberPlaceBoard } from "./NumberPlaceBoard";
 import { NumberPlaceControls } from "./NumberPlaceControls";
-import { NumberPlaceSolution } from "./NumberPlaceSolution";
 import { useNumberPlaceState } from "./useNumberPlaceState";
 
 export function NumberPlaceApp() {
@@ -12,10 +11,8 @@ export function NumberPlaceApp() {
     startNewGame,
     resetToInitialPuzzle,
     isVerifyResultVisible,
-    isSolutionVisible,
     solutionBoard,
     toggleVerifyResultVisibility,
-    toggleSolutionVisibility,
   } = useNumberPlaceState();
 
   const handleNewGame = (nextDifficulty: typeof difficulty) => {
@@ -38,16 +35,18 @@ export function NumberPlaceApp() {
     resetToInitialPuzzle();
   };
 
+  const isComplete = cells.every((row, rowIndex) =>
+    row.every((cell, columnIndex) => cell.value === solutionBoard[rowIndex][columnIndex]),
+  );
+
   return (
-    <section className="flex flex-col items-center p-5 gap-5">
+    <section className="flex flex-col items-center gap-5 p-3">
       <h1 className="text-3xl font-bold">Number Place</h1>
 
       <NumberPlaceControls
         difficulty={difficulty}
         onNewGame={handleNewGame}
         onReset={handleReset}
-        isSolutionVisible={isSolutionVisible}
-        onToggleSolutionVisibility={toggleSolutionVisibility}
         isVerifyResultVisible={isVerifyResultVisible}
         onToggleVerifyResultVisibility={toggleVerifyResultVisibility}
       />
@@ -59,7 +58,7 @@ export function NumberPlaceApp() {
         solutionBoard={solutionBoard}
       />
 
-      {isSolutionVisible && <NumberPlaceSolution solutionBoard={solutionBoard} />}
+      {isComplete && <p className="font-semibold">Completed⭐</p>}
     </section>
   );
 }

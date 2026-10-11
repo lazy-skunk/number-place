@@ -33,7 +33,6 @@ export function useNumberPlaceState() {
   const { cells, difficulty, solution: solutionBoard } = state;
 
   const [isVerifyResultVisible, setIsVerifyResultVisible] = useState(false);
-  const [isSolutionVisible, setIsSolutionVisible] = useState(false);
 
   const hasUserEditsSinceStart = cells.some((row) =>
     row.some((cell) => !cell.fixed && cell.value !== 0),
@@ -42,7 +41,6 @@ export function useNumberPlaceState() {
   function startNewGame(nextDifficulty: Difficulty) {
     setState(createGameState(nextDifficulty));
     setIsVerifyResultVisible(false);
-    setIsSolutionVisible(false);
   }
 
   function resetToInitialPuzzle() {
@@ -51,7 +49,6 @@ export function useNumberPlaceState() {
       cells: toCells(previousState.initial),
     }));
     setIsVerifyResultVisible(false);
-    setIsSolutionVisible(false);
   }
 
   function applyDigitInput(rowIndex: number, columnIndex: number, rawInput: string) {
@@ -78,21 +75,15 @@ export function useNumberPlaceState() {
     setIsVerifyResultVisible((previousValue) => !previousValue);
   }
 
-  function toggleSolutionVisibility() {
-    setIsSolutionVisible((previousValue) => !previousValue);
-  }
-
   return {
     cells,
     difficulty,
     hasUserEditsSinceStart,
     isVerifyResultVisible,
-    isSolutionVisible,
     solutionBoard,
     applyDigitInput,
     startNewGame,
     resetToInitialPuzzle,
     toggleVerifyResultVisibility,
-    toggleSolutionVisibility,
   };
 }

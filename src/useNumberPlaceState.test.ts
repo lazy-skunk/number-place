@@ -29,23 +29,18 @@ describe("useNumberPlaceState", () => {
     expect(result.current.hasUserEditsSinceStart).toBe(false);
   });
 
-  it("restores the initial puzzle and hides verification and solution on reset", () => {
+  it("restores the initial puzzle and hides verification on reset", () => {
     const { result } = renderHook(() => useNumberPlaceState());
     const initialCells = result.current.cells;
 
     act(() => result.current.applyDigitInput(0, 1, "9"));
-    act(() => {
-      result.current.toggleVerifyResultVisibility();
-      result.current.toggleSolutionVisibility();
-    });
+    act(() => result.current.toggleVerifyResultVisibility());
     expect(result.current.isVerifyResultVisible).toBe(true);
-    expect(result.current.isSolutionVisible).toBe(true);
 
     act(() => result.current.resetToInitialPuzzle());
     expect(result.current.cells).toEqual(initialCells);
     expect(result.current.hasUserEditsSinceStart).toBe(false);
     expect(result.current.isVerifyResultVisible).toBe(false);
-    expect(result.current.isSolutionVisible).toBe(false);
   });
 
   it("hides verification when an entry changes", () => {

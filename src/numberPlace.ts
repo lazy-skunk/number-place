@@ -65,20 +65,28 @@ function solve(board: Board): boolean {
 // Finding two solutions is enough to rule out uniqueness.
 function isUniqueSolution(board: Board): boolean {
   const countSolutionPaths = (current: Board, limit: number): number => {
-    const empty = findEmpty(current);
-    if (!empty) return 1;
-    const [rowIndex, columnIndex] = empty;
-    let count = 0;
-    for (let candidate = 1; candidate <= 9; candidate++) {
-      if (isSafe(current, rowIndex, columnIndex, candidate)) {
-        current[rowIndex][columnIndex] = candidate;
-        count += countSolutionPaths(current, limit);
-        if (count >= limit) {
-          current[rowIndex][columnIndex] = 0;
-          return count;
+    let nextCell: [number, number, number[]] | null = null;
+    for (let rowIndex = 0; rowIndex < GRID_SIZE; rowIndex++) {
+      for (let columnIndex = 0; columnIndex < GRID_SIZE; columnIndex++) {
+        if (current[rowIndex][columnIndex] !== 0) continue;
+        const candidates = candidatesFor(current, rowIndex, columnIndex);
+        if (candidates.length === 0) return 0;
+        if (!nextCell || candidates.length < nextCell[2].length) {
+          nextCell = [rowIndex, columnIndex, candidates];
         }
-        current[rowIndex][columnIndex] = 0;
       }
+    }
+    if (!nextCell) return 1;
+    const [rowIndex, columnIndex, candidates] = nextCell;
+    let count = 0;
+    for (const candidate of candidates) {
+      current[rowIndex][columnIndex] = candidate;
+      count += countSolutionPaths(current, limit);
+      if (count >= limit) {
+        current[rowIndex][columnIndex] = 0;
+        return count;
+      }
+      current[rowIndex][columnIndex] = 0;
     }
     return count;
   };
@@ -98,42 +106,114 @@ function generateFullBoard(): Board {
 
 export type Difficulty = "easy" | "medium" | "hard";
 
-function removalCountForDifficulty(difficulty: Difficulty): number {
-  switch (difficulty) {
-    case "easy":
-      return 48;
-    case "medium":
-      return 56;
-    case "hard":
-      return 64;
+const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
+
+function candidatesFor(board: Board, rowIndex: number, columnIndex: number): number[] {
+  const candidates: number[] = [];
+  for (let value = 1; value <= GRID_SIZE; value++) {
+    if (isSafe(board, rowIndex, columnIndex, value)) candidates.push(value);
   }
+  return candidates;
+}
+
+type LogicalMove = [rowIndex: number, columnIndex: number, value: number];
+
+function findNakedSingle(board: Board): LogicalMove | null {
+  for (let rowIndex = 0; rowIndex < GRID_SIZE; rowIndex++) {
+    for (let columnIndex = 0; columnIndex < GRID_SIZE; columnIndex++) {
+      if (board[rowIndex][columnIndex] !== 0) continue;
+      const candidates = candidatesFor(board, rowIndex, columnIndex);
+      if (candidates.length === 1) return [rowIndex, columnIndex, candidates[0]];
+    }
+  }
+  return null;
+}
+
+function findHiddenSingleInCells(board: Board, cells: Array<[number, number]>): LogicalMove | null {
+  for (let value = 1; value <= GRID_SIZE; value++) {
+    const availableCells = cells.filter(
+      ([rowIndex, columnIndex]) =>
+        board[rowIndex][columnIndex] === 0 &&
+        candidatesFor(board, rowIndex, columnIndex).includes(value),
+    );
+    if (availableCells.length === 1) return [...availableCells[0], value];
+  }
+  return null;
+}
+
+function findHiddenSingle(board: Board): LogicalMove | null {
+  for (let index = 0; index < GRID_SIZE; index++) {
+    const row = createZeroBasedIndices(GRID_SIZE).map(
+      (columnIndex) => [index, columnIndex] as [number, number],
+    );
+    const column = createZeroBasedIndices(GRID_SIZE).map(
+      (rowIndex) => [rowIndex, index] as [number, number],
+    );
+    const rowMove = findHiddenSingleInCells(board, row);
+    if (rowMove) return rowMove;
+    const columnMove = findHiddenSingleInCells(board, column);
+    if (columnMove) return columnMove;
+  }
+
+  for (let boxRow = 0; boxRow < BOX_SIZE; boxRow++) {
+    for (let boxColumn = 0; boxColumn < BOX_SIZE; boxColumn++) {
+      const cells: Array<[number, number]> = [];
+      for (let rowOffset = 0; rowOffset < BOX_SIZE; rowOffset++) {
+        for (let columnOffset = 0; columnOffset < BOX_SIZE; columnOffset++) {
+          cells.push([boxRow * BOX_SIZE + rowOffset, boxColumn * BOX_SIZE + columnOffset]);
+        }
+      }
+      const move = findHiddenSingleInCells(board, cells);
+      if (move) return move;
+    }
+  }
+  return null;
+}
+
+function canSolveLogically(board: Board, includeHiddenSingles: boolean): boolean {
+  const workingBoard = cloneBoard(board);
+  while (findEmpty(workingBoard)) {
+    const move = findNakedSingle(workingBoard);
+    const nextMove = move ?? (includeHiddenSingles ? findHiddenSingle(workingBoard) : null);
+    if (!nextMove) return false;
+    const [rowIndex, columnIndex, value] = nextMove;
+    workingBoard[rowIndex][columnIndex] = value;
+  }
+  return true;
+}
+
+export function rateDifficulty(board: Board): Difficulty {
+  if (canSolveLogically(board, false)) return "easy";
+  if (canSolveLogically(board, true)) return "medium";
+  return "hard";
 }
 
 export function generatePuzzle(difficulty: Difficulty = "easy"): {
   puzzle: Board;
   solution: Board;
 } {
-  const full = generateFullBoard();
-  const puzzle = cloneBoard(full);
-  const toRemove = removalCountForDifficulty(difficulty);
+  while (true) {
+    const full = generateFullBoard();
+    const puzzle = cloneBoard(full);
+    const cellPositions = shuffle(createZeroBasedIndices(GRID_SIZE * GRID_SIZE));
 
-  const cellPositions = shuffle(createZeroBasedIndices(81));
-  let removed = 0;
-  for (const positionIndex of cellPositions) {
-    if (removed >= toRemove) break;
-    const rowIndex = Math.floor(positionIndex / 9);
-    const columnIndex = positionIndex % 9;
-    const backup = puzzle[rowIndex][columnIndex];
-    if (backup === 0) continue;
-    puzzle[rowIndex][columnIndex] = 0;
-    const copy = cloneBoard(puzzle);
-    const hasUniqueSolution = isUniqueSolution(copy);
-    if (!hasUniqueSolution) {
-      puzzle[rowIndex][columnIndex] = backup;
-    } else {
-      removed++;
+    for (const positionIndex of cellPositions) {
+      const rowIndex = Math.floor(positionIndex / GRID_SIZE);
+      const columnIndex = positionIndex % GRID_SIZE;
+      const backup = puzzle[rowIndex][columnIndex];
+      puzzle[rowIndex][columnIndex] = 0;
+
+      if (!isUniqueSolution(cloneBoard(puzzle))) {
+        puzzle[rowIndex][columnIndex] = backup;
+        continue;
+      }
+
+      const generatedDifficulty = rateDifficulty(puzzle);
+      if (DIFFICULTIES.indexOf(generatedDifficulty) > DIFFICULTIES.indexOf(difficulty)) {
+        puzzle[rowIndex][columnIndex] = backup;
+      }
     }
-  }
 
-  return { puzzle, solution: full };
+    if (rateDifficulty(puzzle) === difficulty) return { puzzle, solution: full };
+  }
 }
