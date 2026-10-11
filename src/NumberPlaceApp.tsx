@@ -1,7 +1,7 @@
 import { NumberPlaceBoard } from "./NumberPlaceBoard";
 import { NumberPlaceControls } from "./NumberPlaceControls";
 import { NumberPlaceSolution } from "./NumberPlaceSolution";
-import { useNumberPlaceState } from "../hooks/useNumberPlaceState";
+import { useNumberPlaceState } from "./useNumberPlaceState";
 
 export function NumberPlaceApp() {
   const {
@@ -39,7 +39,7 @@ export function NumberPlaceApp() {
   };
 
   return (
-    <main className="flex flex-col items-center p-5 gap-5">
+    <section className="flex flex-col items-center p-5 gap-5">
       <h1 className="text-3xl font-bold">Number Place</h1>
 
       <NumberPlaceControls
@@ -60,6 +60,6 @@ export function NumberPlaceApp() {
       />
 
       {isSolutionVisible && <NumberPlaceSolution solutionBoard={solutionBoard} />}
-    </main>
+    </section>
   );
 }

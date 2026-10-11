@@ -3,7 +3,7 @@ import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 import { useNumberPlaceState } from "./useNumberPlaceState";
 
-vi.mock("../lib/numberPlace", () => ({
+vi.mock("./numberPlace", () => ({
   generatePuzzle: () => ({
     puzzle: [[5, 0, 0]],
     solution: [[5, 3, 4]],

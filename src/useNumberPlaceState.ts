@@ -1,4 +1,4 @@
-import { generatePuzzle, type Board, type Difficulty } from "../lib/numberPlace";
+import { generatePuzzle, type Board, type Difficulty } from "./numberPlace";
 import { useState } from "react";
 
 export type Cell = {

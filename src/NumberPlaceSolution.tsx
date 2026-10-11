@@ -1,5 +1,5 @@
-import { mergeClassNames } from "../lib/mergeConditionalClasses";
-import type { Board } from "../lib/numberPlace";
+import { mergeClassNames } from "./mergeConditionalClasses";
+import type { Board } from "./numberPlace";
 
 type NumberPlaceSolutionProps = {
   solutionBoard: Board;
@@ -15,7 +15,7 @@ export function NumberPlaceSolution({ solutionBoard }: NumberPlaceSolutionProps)
             <div
               key={`${rowIndex}-${columnIndex}`}
               className={mergeClassNames(
-                "relative w-[clamp(2rem,10vw,3rem)] h-[clamp(2rem,10vw,3rem)] border border-zinc-500 flex items-center justify-center",
+                "relative w-[clamp(2rem,10vw,3rem)] h-[clamp(2rem,10vw,3rem)] border border-gray-500 flex items-center justify-center",
                 rowIndex % 3 === 0 && "border-t-2",
                 columnIndex % 3 === 0 && "border-l-2",
                 rowIndex === 8 && "border-b-2",

@@ -1,6 +1,6 @@
-import { mergeClassNames } from "../lib/mergeConditionalClasses";
-import { type Board } from "../lib/numberPlace";
-import type { Cell } from "../hooks/useNumberPlaceState";
+import { mergeClassNames } from "./mergeConditionalClasses";
+import { type Board } from "./numberPlace";
+import type { Cell } from "./useNumberPlaceState";
 
 type NumberPlaceBoardProps = {
   cells: Cell[][];
@@ -34,7 +34,7 @@ export function NumberPlaceBoard({
             <div
               key={`${rowIndex}-${columnIndex}`}
               className={mergeClassNames(
-                "relative w-[clamp(2rem,10vw,3rem)] h-[clamp(2rem,10vw,3rem)] border border-zinc-500 flex items-center justify-center focus-within:ring focus-within:ring-green-500",
+                "relative w-[clamp(2rem,10vw,3rem)] h-[clamp(2rem,10vw,3rem)] border border-gray-500 flex items-center justify-center focus-within:ring focus-within:ring-green-500",
                 rowIndex % 3 === 0 && "border-t-2",
                 columnIndex % 3 === 0 && "border-l-2",
                 rowIndex === 8 && "border-b-2",

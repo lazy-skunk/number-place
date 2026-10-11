@@ -1,4 +1,4 @@
-import { NumberPlaceApp } from "./components/NumberPlaceApp";
+import { NumberPlaceApp } from "./NumberPlaceApp";
 
 export function App() {
   return (

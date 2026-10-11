@@ -1,5 +1,5 @@
-import { mergeClassNames } from "../lib/mergeConditionalClasses";
-import type { Difficulty } from "../lib/numberPlace";
+import { mergeClassNames } from "./mergeConditionalClasses";
+import type { Difficulty } from "./numberPlace";
 
 type NumberPlaceControlsProps = {
   difficulty: Difficulty;
@@ -12,6 +12,9 @@ type NumberPlaceControlsProps = {
 };
 
 const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
+
+const buttonClassName =
+  "cursor-pointer rounded-full bg-gray-800/50 px-3 py-1 transition hover:bg-gray-800 active:scale-95";
 
 export function NumberPlaceControls({
   difficulty,
@@ -28,8 +31,9 @@ export function NumberPlaceControls({
         <button
           key={difficultyOption}
           className={mergeClassNames(
-            "px-3 py-2 rounded border capitalize",
-            difficulty === difficultyOption && "border-green-500",
+            buttonClassName,
+            "capitalize",
+            difficulty === difficultyOption && "bg-green-700/50 hover:bg-green-700",
           )}
           onClick={() => onNewGame(difficultyOption)}
         >
@@ -37,20 +41,26 @@ export function NumberPlaceControls({
         </button>
       ))}
 
-      <div className="mx-2 h-px w-full bg-zinc-500 sm:h-6 sm:w-px" />
+      <div className="mx-2 h-px w-full bg-gray-500 sm:h-6 sm:w-px" />
 
-      <button className="px-3 py-2 rounded border" onClick={onReset}>
+      <button className={buttonClassName} onClick={onReset}>
         Reset
       </button>
 
-      <button className="px-3 py-2 rounded border" onClick={onToggleSolutionVisibility}>
+      <button
+        className={mergeClassNames(
+          buttonClassName,
+          isSolutionVisible && "bg-gray-600/50 hover:bg-gray-600",
+        )}
+        onClick={onToggleSolutionVisibility}
+      >
         {isSolutionVisible ? "Hide Solution" : "Show Solution"}
       </button>
 
       <button
         className={mergeClassNames(
-          "px-3 py-2 rounded border",
-          isVerifyResultVisible && "border-green-500",
+          buttonClassName,
+          isVerifyResultVisible && "bg-green-700/50 hover:bg-green-700",
         )}
         onClick={onToggleVerifyResultVisibility}
       >
