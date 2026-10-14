@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+
 import { useNumberPlaceState } from "./useNumberPlaceState";
 
 vi.mock("./numberPlace", () => ({

@@ -1,5 +1,6 @@
-import { generatePuzzle, type Board, type Difficulty } from "./numberPlace";
 import { useState } from "react";
+
+import { generatePuzzle, type Board, type Difficulty } from "./numberPlace";
 
 export type Cell = {
   value: number;
