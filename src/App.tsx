@@ -40,8 +40,12 @@ export function App() {
   );
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-5 p-3">
-      <h1 className="text-3xl font-bold">Number Place</h1>
+    <main className="bg-background text-foreground flex min-h-screen flex-col items-center justify-center gap-5 p-3">
+      <header>
+        <h1 className="text-3xl font-bold">
+          <a href="#">Number Place</a>
+        </h1>
+      </header>
 
       <NumberPlaceControls
         difficulty={difficulty}

@@ -26,12 +26,16 @@ export function NumberPlaceControls({
       <label>
         Difficulty:{" "}
         <select
-          className="rounded bg-gray-800/50 px-2 py-1"
+          className="bg-foreground/3 rounded px-2 py-1"
           value={selectedDifficulty}
           onChange={(event) => setSelectedDifficulty(event.target.value as Difficulty)}
         >
           {DIFFICULTIES.map((difficultyOption) => (
-            <option key={difficultyOption} value={difficultyOption} className="bg-gray-800">
+            <option
+              key={difficultyOption}
+              value={difficultyOption}
+              className="bg-background text-foreground"
+            >
               {difficultyOption.charAt(0).toUpperCase() + difficultyOption.slice(1)}
             </option>
           ))}
@@ -40,7 +44,7 @@ export function NumberPlaceControls({
 
       <button
         type="button"
-        className="rounded-full bg-green-900/50 px-3 py-1 transition hover:bg-green-900 active:scale-95"
+        className="cursor-pointer rounded bg-green-100 px-4 py-2 text-sm font-medium text-green-900 motion-safe:transition motion-safe:active:translate-y-px dark:bg-green-900 dark:text-green-100"
         onClick={() => onNewGame(selectedDifficulty)}
       >
         New Game
@@ -48,7 +52,7 @@ export function NumberPlaceControls({
 
       <button
         type="button"
-        className="rounded-full bg-red-900/50 px-3 py-1 transition hover:bg-red-900 active:scale-95"
+        className="cursor-pointer rounded bg-red-100 px-4 py-2 text-sm font-medium text-red-900 motion-safe:transition motion-safe:active:translate-y-px dark:bg-red-900 dark:text-red-100"
         onClick={onReset}
       >
         Reset
@@ -56,7 +60,7 @@ export function NumberPlaceControls({
 
       <button
         type="button"
-        className="rounded-full bg-green-900/50 px-3 py-1 transition hover:bg-green-900 active:scale-95"
+        className="cursor-pointer rounded bg-green-100 px-4 py-2 text-sm font-medium text-green-900 motion-safe:transition motion-safe:active:translate-y-px dark:bg-green-900 dark:text-green-100"
         onClick={onToggleVerifyResultVisibility}
       >
         {isVerifyResultVisible ? "Hide Result" : "Verify"}
