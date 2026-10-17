@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { type Board } from "./numberPlace";
 import type { Cell } from "./useNumberPlaceState";
 
@@ -14,10 +16,22 @@ export function NumberPlaceBoard({
   solutionBoard,
   onInput,
 }: NumberPlaceBoardProps) {
+  const [hoveredCell, setHoveredCell] = useState<[number, number] | null>(null);
+  const [focusedCell, setFocusedCell] = useState<[number, number] | null>(null);
+  const activeCell = hoveredCell ?? focusedCell;
   return (
-    <div className="border-foreground/50 grid aspect-square w-full max-w-xl grid-cols-9 grid-rows-9 border-2">
+    <div
+      className="border-foreground/50 grid aspect-square w-full max-w-xl grid-cols-9 grid-rows-9 border-2"
+      onPointerLeave={() => setHoveredCell(null)}
+    >
       {cells.map((row, rowIndex) =>
         row.map((cell, columnIndex) => {
+          const isHighlighted =
+            activeCell !== null &&
+            (rowIndex === activeCell[0] ||
+              columnIndex === activeCell[1] ||
+              (Math.floor(rowIndex / 3) === Math.floor(activeCell[0] / 3) &&
+                Math.floor(columnIndex / 3) === Math.floor(activeCell[1] / 3)));
           const isWrongVisible =
             isVerifyResultVisible &&
             cell.value !== 0 &&
@@ -32,11 +46,20 @@ export function NumberPlaceBoard({
           return (
             <div
               key={`${rowIndex}-${columnIndex}`}
+              onPointerEnter={() => {
+                if (!cell.fixed) {
+                  setHoveredCell([rowIndex, columnIndex]);
+                }
+              }}
               className={[
                 "border-foreground/50 min-h-0 min-w-0 border",
                 rowIndex > 0 && rowIndex % 3 === 0 && "border-t-2",
                 columnIndex > 0 && columnIndex % 3 === 0 && "border-l-2",
-                cell.fixed && "bg-gray-200 dark:bg-gray-800",
+                cell.fixed && !isHighlighted && "bg-gray-200 dark:bg-gray-800",
+                isHighlighted &&
+                  !isWrongVisible &&
+                  !isCorrectVisible &&
+                  (cell.fixed ? "bg-blue-200 dark:bg-blue-800" : "bg-blue-100 dark:bg-blue-900"),
                 isWrongVisible && "bg-red-900 text-red-100",
                 isCorrectVisible && "bg-green-900 text-green-100",
               ]
@@ -50,7 +73,11 @@ export function NumberPlaceBoard({
                 maxLength={1}
                 className="size-full bg-transparent text-center text-3xl"
                 value={cell.value === 0 ? "" : String(cell.value)}
-                onFocus={(event) => event.currentTarget.select()}
+                onFocus={(event) => {
+                  setFocusedCell([rowIndex, columnIndex]);
+                  event.currentTarget.select();
+                }}
+                onBlur={() => setFocusedCell(null)}
                 onClick={(event) => event.currentTarget.select()}
                 onChange={(event) => {
                   onInput(rowIndex, columnIndex, event.currentTarget.value);
